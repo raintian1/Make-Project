@@ -37,6 +37,7 @@ def inputPlayers():
 # Maybe use dictionary here (call on integer values instead of looking up a word)
 def assignRoles():
     global merged_list
+    global merged_dct
     random_role = random.sample(roles_transformed, k = playerNumber)
     #print(playerList)
     #print(random_role)
@@ -44,7 +45,10 @@ def assignRoles():
     print('\033[1m' + 'Role assignment as follows: ' + '\033[0m')
     merged_list = [name + ': ' + role for name, role in zip(playerList, random_role)]
     #tuple(zip(playerList, random_role)) - Alternative method using tuples
-    print(*merged_list, sep = '\n')
+    merged_dct = dict(zip(playerList, random_role))
+    #print(merged_dct)
+    for key, value in merged_dct.items():
+        print(key, ':', value)
 
 def nightTime():
     time.sleep(1)
