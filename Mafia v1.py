@@ -257,6 +257,45 @@ def escortTarget():
             exit()
     return escort_target
 
+def doctorNightCycle():
+    print()
+    print('Now entering Doctor action phase...')
+
+    escortAlive()
+
+def doctorAlive():
+    global doctor_alive
+
+    print('Is the Doctor still alive? (y/n)')
+    doctor_alive = ''
+    while doctor_alive != 'y' or doctor_alive != 'n':
+        doctor_alive = str(input())
+        if doctor_alive == 'y':
+            print('Who will the Doctor heal?')
+            doctor_target = ''
+            doctortTarget()
+        elif doctor_alive == 'n':
+            print('The Doctor is dead')
+            exit()
+        else:
+            print('Select y/n, try again')
+    return doctor_alive
+
+def doctorTarget():
+    global doctor_target
+
+    doctor_target = ''
+    while doctor_alive == "y":
+        doctor_target = str(input())
+        if doctor_target not in playerList:
+            print('Player not found, try again')
+        elif doctor_target == merged_dct["Doctor"]:
+            print('You cannot target yourself. Please try again.')
+        else:
+            exit()
+    return doctor_target
+
+
 transfromList()
 inputPlayers()
 assignRoles()
@@ -267,3 +306,5 @@ framerNightCycle()
 mafiaTargetCheck()
 jailorNightCycle()
 escortNightCycle()
+
+doctorNightCycle()
