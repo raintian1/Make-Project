@@ -43,10 +43,10 @@ def assignRoles():
     #print(random_role)
     print()
     print('\033[1m' + 'Role assignment as follows: ' + '\033[0m')
-    merged_list = [name + ': ' + role for name, role in zip(playerList, random_role)]
+    merged_list = [name + ': ' + role for name, role in zip(random_role, playerList)]
     #tuple(zip(playerList, random_role)) - Alternative method using tuples
-    merged_dct = dict(zip(playerList, random_role))
-    #print(merged_dct)
+    merged_dct = dict(zip(random_role, playerList))
+    print(merged_dct)
     for key, value in merged_dct.items():
         print(key, ':', value)
 
@@ -56,33 +56,43 @@ def nightTime():
     print('\033[1m' + 'Night Time...' + '\033[0m')
 
 def godfatherNightCycle():
-    global godfather_alive
-    global godfather_target
-
     print()
     print('Now entering Godfather action phase...')
     print('Is the Godfather still alive? (y/n)')
-    godfather_alive = ''
-    godfather_target = ''
 
+    godfatherAlive()
+
+def godfatherAlive():
+    global godfather_alive
+
+    godfather_alive = ''
     while godfather_alive != 'y' or godfather_alive != 'n':
         godfather_alive = str(input())
         if godfather_alive == 'y':
             print('Who will the Godfather appoint to kill?')
             godfather_target = ''
-            while godfather_target not in playerList:
-                godfather_target = str(input())
-                if godfather_target not in playerList:
-                    print('Player not found, try again')
-                elif godfather_target == merged_list[int(godfather_target)-1]:
-                    print('Cannot target self.')
-            return godfather_target
+            godfatherTarget()
         elif godfather_alive == 'n':
             print('The Godfather is dead')
-            return godfather_alive
+            mafiosoNightCycle()
         else:
             print('Select y/n, try again')
     return godfather_alive
+
+def godfatherTarget():
+    global godfather_target
+
+    godfather_target = ''
+    while godfather_alive == "y":
+        godfather_target = str(input())
+        if godfather_target not in playerList:
+            print('Player not found, try again')
+        elif godfather_target == merged_dct["Godfather"]:
+            print('Cannot target a member of the Mafia. Try again')
+        else:
+            mafiosoNightCycle()
+    return godfather_target
+
 
 def mafiosoNightCycle():
     global mafioso_alive
