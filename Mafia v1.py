@@ -181,6 +181,44 @@ def mafiaTargetCheck():
     else:
         print('The Mafia came to an agreement, ' + godfather_target + ''' is tonight's target.''')
 
+def escortNightCycle():
+    print()
+    print('Now entering Escort action phase...')
+
+    escortAlive()
+
+def escortAlive():
+    global escort_alive
+
+    print('Is the Escort still alive? (y/n)')
+    escort_alive = ''
+    while escort_alive != 'y' or escort_alive != 'n':
+        escort_alive = str(input())
+        if escort_alive == 'y':
+            print('Who will the Escort distract?')
+            escort_target = ''
+            escortTarget()
+        elif escort_alive == 'n':
+            print('The Escort is dead')
+            exit()
+        else:
+            print('Select y/n, try again')
+    return escort_alive
+
+def escortTarget():
+    global escort_target
+
+    escort_target = ''
+    while escort_alive == "y":
+        escort_target = str(input())
+        if escort_target not in playerList:
+            print('Player not found, try again')
+        elif escort_target == merged_dct["Escort"]:
+            print('You cannot target yourself. Please try again.')
+        else:
+            exit()
+    return escort_target
+
 transfromList()
 inputPlayers()
 assignRoles()
@@ -189,3 +227,4 @@ godfatherNightCycle()
 mafiosoNightCycle()
 framerNightCycle()
 mafiaTargetCheck()
+escortNightCycle()
