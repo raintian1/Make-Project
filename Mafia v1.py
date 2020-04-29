@@ -7,6 +7,7 @@ print('\033[1m' + '''Welcome to Mafia! Input the number of players:''' + '\033[0
 # Or create a class variable for role? for XXX in class: if status == 'alive'...
 roles = ['Sheriff', 'Doctor', 'Mayor', 'Escort', 'Amnesiac', 'Godfather', 'Framer', 'Jester', 'Jailor', 'Mafioso', 'Vigilante', 'Executioner']
 playerList = []
+alive = {}
 
 def transfromList():
     global playerNumber
@@ -34,7 +35,6 @@ def inputPlayers():
         players = input()
         playerList.append(players)
 
-# Maybe use dictionary here (call on integer values instead of looking up a word)
 def assignRoles():
     global merged_list
     global merged_dct
@@ -150,7 +150,7 @@ def framerAlive():
             framerTarget()
         elif framer_alive == 'n':
             print('The Framer is dead')
-            exit()
+            jailorNightCycle()
         else:
             print('Select y/n, try again')
     return framer_alive
@@ -166,7 +166,7 @@ def framerTarget():
         elif framer_target == merged_dct["Framer"]:
             print('Cannot target a member of the Mafia. Try again')
         else:
-            exit()
+            jailorNightCycle()
     return framer_target
 
 def mafiaTargetCheck():
@@ -180,6 +180,44 @@ def mafiaTargetCheck():
         print('The Mafioso must comply with the Godfather, ' + godfather_target + ''' is tonight's target.''')
     else:
         print('The Mafia came to an agreement, ' + godfather_target + ''' is tonight's target.''')
+
+def jailorNightCycle():
+    print()
+    print('Now entering Jailor action phase...')
+
+    jailorAlive()
+
+def jailorAlive():
+    global jailor_alive
+
+    print('Is the Jailor still alive? (y/n)')
+    jailor_alive = ''
+    while jailor_alive != 'y' or jailor_alive != 'n':
+        jailor_alive = str(input())
+        if jailor_alive == 'y':
+            print('Who will the Jailor jail?')
+            jailor_target = ''
+            jailorTarget()
+        elif jailor_alive == 'n':
+            print('The Jailor is dead')
+            escortNightCycle()
+        else:
+            print('Select y/n, try again')
+    return jailor_alive
+
+def jailorTarget():
+    global jailor_target
+
+    jailor_target = ''
+    while jailor_alive == "y":
+        jailor_target = str(input())
+        if jailor_target not in playerList:
+            print('Player not found, try again')
+        elif jailor_target == merged_dct["Jailor"]:
+            print('You cannot target yourself. Try again')
+        else:
+            escortNightCycle()
+    return jailor_target
 
 def escortNightCycle():
     print()
@@ -227,4 +265,5 @@ godfatherNightCycle()
 mafiosoNightCycle()
 framerNightCycle()
 mafiaTargetCheck()
+jailorNightCycle()
 escortNightCycle()
