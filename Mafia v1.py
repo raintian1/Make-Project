@@ -112,6 +112,7 @@ def mafiosoAlive():
             mafiosoTarget()
         elif mafioso_alive == 'n':
             print('The Mafioso is dead')
+            mafiaTargetCheck()
             framerNightCycle()
         else:
             print('Select y/n, try again')
@@ -128,6 +129,7 @@ def mafiosoTarget():
         elif mafioso_target == merged_dct["Mafioso"]:
             print('Cannot target a member of the Mafia. Try again')
         else:
+            mafiaTargetCheck()
             framerNightCycle()
     return mafioso_target
 
@@ -172,10 +174,14 @@ def framerTarget():
 def mafiaTargetCheck():
     print()
     time.sleep(1)
+    global mafiaside_target
+
     if godfather_alive == 'n':
         print('With no Godfather, ' + mafioso_target + ''' becomes tonight's target.''')
+        mafiaside_target = mafioso_target
     elif mafioso_alive == 'n':
         print('With no Mafioso, ' + godfather_target + ''' becomes tonight's target.''')
+        mafiaside_target = godfather_target
     elif godfather_target != mafioso_target:
         print('The Mafioso must comply with the Godfather, ' + godfather_target + ''' is tonight's target.''')
     else:
@@ -238,7 +244,7 @@ def escortAlive():
             escortTarget()
         elif escort_alive == 'n':
             print('The Escort is dead')
-            exit()
+            sheriffNightCycle()
         else:
             print('Select y/n, try again')
     return escort_alive
@@ -254,14 +260,52 @@ def escortTarget():
         elif escort_target == merged_dct["Escort"]:
             print('You cannot target yourself. Please try again.')
         else:
-            exit()
+            sheriffNightCycle()
     return escort_target
+
+def sheriffNightCycle():
+    print()
+    print('Now entering Sheriff action phase...')
+
+    sheriffAlive()
+
+def sheriffAlive():
+    global sheriff_alive
+
+    print('Is the Sheriff still alive? (y/n)')
+    sheriff_alive = ''
+    while sheriff_alive != 'y' or sheriff_alive != 'n':
+        sheriff_alive = str(input())
+        if sheriff_alive == 'y':
+            print('Who will the Sheriff investigate?')
+            sheriff_target = ''
+            sheriffTarget()
+        elif sheriff_alive == 'n':
+            print('The Sheriff is dead')
+            doctorNightCycle()
+        else:
+            print('Select y/n, try again')
+    return sheriff_alive
+
+def sheriffTarget():
+    global sheriff_target
+
+    sheriff_target = ''
+    while sheriff_alive == "y":
+        sheriff_target = str(input())
+        if sheriff_target not in playerList:
+            print('Player not found, try again')
+        elif sheriff_target == merged_dct["Sheriff"]:
+            print('You cannot target yourself. Please try again.')
+        else:
+            doctorNightCycle()
+    return doctor_target
 
 def doctorNightCycle():
     print()
     print('Now entering Doctor action phase...')
 
-    escortAlive()
+    doctorAlive()
 
 def doctorAlive():
     global doctor_alive
@@ -273,7 +317,7 @@ def doctorAlive():
         if doctor_alive == 'y':
             print('Who will the Doctor heal?')
             doctor_target = ''
-            doctortTarget()
+            doctorTarget()
         elif doctor_alive == 'n':
             print('The Doctor is dead')
             exit()
@@ -289,12 +333,12 @@ def doctorTarget():
         doctor_target = str(input())
         if doctor_target not in playerList:
             print('Player not found, try again')
-        elif doctor_target == merged_dct["Doctor"]:
-            print('You cannot target yourself. Please try again.')
+        if doctor_target == mafiaside_target:
+            print("Your target was attacked last night but you were able to save them.")
+            exit()
         else:
             exit()
     return doctor_target
-
 
 transfromList()
 inputPlayers()
@@ -303,8 +347,7 @@ nightTime()
 godfatherNightCycle()
 mafiosoNightCycle()
 framerNightCycle()
-mafiaTargetCheck()
 jailorNightCycle()
 escortNightCycle()
-
+sheriffNightCycle()
 doctorNightCycle()
