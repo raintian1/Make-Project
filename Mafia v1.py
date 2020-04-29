@@ -132,11 +132,14 @@ def mafiosoTarget():
     return mafioso_target
 
 def framerNightCycle():
-    global framer_alive
-    global framer_target
-
     print()
     print('Now entering Framer action phase...')
+
+    framerAlive()
+
+def framerAlive():
+    global framer_alive
+
     print('Is the Framer still alive? (y/n)')
     framer_alive = ''
     while framer_alive != 'y' or framer_alive != 'n':
@@ -144,17 +147,27 @@ def framerNightCycle():
         if framer_alive == 'y':
             print('Who will the Framer frame?')
             framer_target = ''
-            while framer_target not in playerList:
-                framer_target = str(input())
-                if framer_target not in playerList:
-                    print('Player not found, try again')
-            return framer_target
+            framerTarget()
         elif framer_alive == 'n':
             print('The Framer is dead')
-            return framer_alive
+            exit()
         else:
             print('Select y/n, try again')
     return framer_alive
+
+def framerTarget():
+    global framer_target
+
+    framer_target = ''
+    while framer_alive == "y":
+        framer_target = str(input())
+        if framer_target not in playerList:
+            print('Player not found, try again')
+        elif framer_target == merged_dct["Framer"]:
+            print('Cannot target a member of the Mafia. Try again')
+        else:
+            exit()
+    return framer_target
 
 def mafiaTargetCheck():
     print()
