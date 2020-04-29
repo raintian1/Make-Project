@@ -58,13 +58,13 @@ def nightTime():
 def godfatherNightCycle():
     print()
     print('Now entering Godfather action phase...')
-    print('Is the Godfather still alive? (y/n)')
 
     godfatherAlive()
 
 def godfatherAlive():
     global godfather_alive
 
+    print('Is the Godfather still alive? (y/n)')
     godfather_alive = ''
     while godfather_alive != 'y' or godfather_alive != 'n':
         godfather_alive = str(input())
@@ -93,33 +93,43 @@ def godfatherTarget():
             mafiosoNightCycle()
     return godfather_target
 
-
 def mafiosoNightCycle():
-    global mafioso_alive
-    global mafioso_target
-
     print()
     print('Now entering Mafioso action phase...')
+
+    mafiosoAlive()
+
+def mafiosoAlive():
+    global mafioso_alive
+
     print('Is the Mafioso still alive? (y/n)')
     mafioso_alive = ''
-    mafioso_target = ''
-
     while mafioso_alive != 'y' or mafioso_alive != 'n':
         mafioso_alive = str(input())
         if mafioso_alive == 'y':
             print('Who will the Mafioso kill?')
             mafioso_target = ''
-            while mafioso_target not in playerList:
-                mafioso_target = str(input())
-                if mafioso_target not in playerList:
-                    print('Player not found, try again')
-            return mafioso_target
+            mafiosoTarget()
         elif mafioso_alive == 'n':
             print('The Mafioso is dead')
-            return mafioso_alive
+            framerNightCycle()
         else:
             print('Select y/n, try again')
     return mafioso_alive
+
+def mafiosoTarget():
+    global mafioso_target
+
+    mafioso_target = ''
+    while mafioso_alive == "y":
+        mafioso_target = str(input())
+        if mafioso_target not in playerList:
+            print('Player not found, try again')
+        elif mafioso_target == merged_dct["Mafioso"]:
+            print('Cannot target a member of the Mafia. Try again')
+        else:
+            framerNightCycle()
+    return mafioso_target
 
 def framerNightCycle():
     global framer_alive
