@@ -265,16 +265,20 @@ def trackerAlive():
     print('Is the Tracker still alive? (y/n)')
     tracker_alive = ''
     while tracker_alive != 'y' or tracker_alive != 'n':
-        tracker_alive = str(input())
-        if tracker_alive == 'y':
-            print('Who will the tracker distract?')
-            tracker_target = ''
-            trackerTarget()
-        elif tracker_alive == 'n':
-            print('The Tracker is dead')
-            exit()
-        else:
-            print('Select y/n, try again')
+            tracker_alive == str(input())
+            if tracker_alive == 'y':
+                if merged_dct["Tracker"] != jailor_target:
+                    print('Who will the Tracker spy on?')
+                    tracker_target = ''
+                    trackerTarget()
+                if merged_dct["Tracker"] == jailor_target:
+                    print("You were jailed by the jailor tonight")
+                    exit()
+            elif tracker_alive == 'n':
+                print('The Tracker is dead')
+                exit()
+            else:
+                print('Select y/n, try again')
     return tracker_alive
 
 def trackerTarget():
@@ -305,9 +309,13 @@ def sheriffAlive():
     while sheriff_alive != 'y' or sheriff_alive != 'n':
         sheriff_alive = str(input())
         if sheriff_alive == 'y':
-            print('Who will the Sheriff investigate?')
-            sheriff_target = ''
-            sheriffTarget()
+            if merged_dct["Sheriff"] != jailor_target:
+                print('Who will the Sheriff investigate??')
+                sheriff_target = ''
+                sheriffTarget()
+            if merged_dct["Sheriff"] == jailor_target:
+                print("You were jailed by the jailor tonight")
+                vigilanteNightCycle()
         elif sheriff_alive == 'n':
             print('The Sheriff is dead')
             vigilanteNightCycle()
@@ -343,9 +351,13 @@ def doctorAlive():
     while doctor_alive != 'y' or doctor_alive != 'n':
         doctor_alive = str(input())
         if doctor_alive == 'y':
-            print('Who will the Doctor heal?')
-            doctor_target = ''
-            doctorTarget()
+            if merged_dct["Doctor"] != jailor_target:
+                print('Who will the Doctor save?')
+                doctor_target = ''
+                doctorTarget()
+            if merged_dct["Doctor"] == jailor_target:
+                print("You were jailed by the jailor tonight")
+                trackerNightCycle()
         elif doctor_alive == 'n':
             print('The Doctor is dead')
             trackerNightCycle()
@@ -382,9 +394,13 @@ def vigilanteAlive():
     while vigilante_alive != 'y' or vigilante_alive != 'n':
         vigilante_alive = str(input())
         if vigilante_alive == 'y':
-            print('Who will the Vigilante shoot?')
-            vigilante_target = ''
-            vigilanteTarget()
+            if merged_dct["Vigilante"] != jailor_target:
+                print('Who will the Vigilante kill?')
+                vigilante_target = ''
+                vigilanteTarget()
+            if merged_dct["Vigilante"] == jailor_target:
+                print("You were jailed by the jailor tonight")
+                doctorNightCycle()
         elif vigilante_alive == 'n':
             print('The Vigilante is dead')
             doctorNightCycle()
