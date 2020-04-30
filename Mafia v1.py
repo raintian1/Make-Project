@@ -67,10 +67,30 @@ def godfatherAlive():
     godfather_alive = ''
     while godfather_alive != 'y' or godfather_alive != 'n':
         godfather_alive = str(input())
-        if godfather_alive == 'y':
-            print('Who will the Godfather appoint to kill?')
-            godfather_target = ''
-            godfatherTarget()
+        if  godfather_alive == 'y':
+            if jailor_alive == 'y' and escort_alive == 'y':
+                if merged_dct["Godfather"] != jailor_target and merged_dct["Godfather"] != escort_target:
+                    print('Who will the Godfather appoint to kill?')
+                    godfather_target = ''
+                    godfatherTarget()
+                if  merged_dct["Godfather"] == jailor_target and merged_dct["Godfather"] != escort_target:
+                    print("You were jailed by the jailor tonight")
+                    mafiosoNightCycle()
+                if  merged_dct["Godfather"] == escort_target and merged_dct["Godfather"] != jailor_target:
+                    print("Your were distracted by the escort tonight")
+                    mafiosoNightCycle()
+            if jailor_alive == 'y' and escort_alive == 'n':
+                if  merged_dct["Godfather"] == jailor_target:
+                    print("You were jailed by the jailor tonight")
+                    mafiosoNightCycle()
+            if jailor_alive == 'n' and escort_alive == 'y':
+                if  merged_dct["Godfather"] == escort_target:
+                    print("Your were distracted by the escort tonight")
+                    mafiosoNightCycle()
+            else:
+                print('Who will the Godfather appoint to kill?')
+                godfather_target = ''
+                godfatherTarget()
         elif godfather_alive == 'n':
             print('The Godfather is dead')
             mafiosoNightCycle()
