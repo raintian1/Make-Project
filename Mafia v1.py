@@ -9,6 +9,7 @@ roles = ['Sheriff', 'Doctor', 'Mayor', 'Escort', 'Amnesiac', 'Godfather', 'Frame
 playerList = []
 alive = {}
 
+
 def transfromList():
     global playerNumber
     global roles_transformed
@@ -320,7 +321,7 @@ def doctorAlive():
             doctorTarget()
         elif doctor_alive == 'n':
             print('The Doctor is dead')
-            exit()
+            vigilanteNightCycle()
         else:
             print('Select y/n, try again')
     return doctor_alive
@@ -337,8 +338,47 @@ def doctorTarget():
             print("Your target was attacked last night but you were able to save them.")
             exit()
         else:
-            exit()
+            print("Your target had a guardian angel watching, but nothing happened")
+            vigilanteNightCycle()
     return doctor_target
+
+def vigilanteNightCycle():
+    print()
+    print('Now entering Vigilante action phase...')
+
+    vigilanteAlive()
+
+def vigilanteAlive():
+    global vigilante_alive
+
+    print('Is the Vigilante still alive? (y/n)')
+    vigilante_alive = ''
+    while vigilante_alive != 'y' or vigilante_alive != 'n':
+        vigilante_alive = str(input())
+        if vigilante_alive == 'y':
+            print('Who will the Vigilante shoot??')
+            vigilante_target = ''
+            vigilanteTarget()
+        elif vigilante_alive == 'n':
+            print('The Vigilante is dead')
+            exit()
+        else:
+            print('Select y/n, try again')
+    return vigilante_alive
+
+def vigilanteTarget():
+    global vigilante_target
+
+    vigilante_target = ''
+    while vigilante_alive == "y":
+        vigilante_target = str(input())
+        if vigilante_target not in playerList:
+            print('Player not found, try again')
+        elif vigilante_target == merged_dct["Vigilante"]:
+            print('You cannot target yourself. Please try again.')
+        else:
+            exit()
+    return vigilante_target
 
 transfromList()
 inputPlayers()
@@ -351,3 +391,5 @@ jailorNightCycle()
 escortNightCycle()
 sheriffNightCycle()
 doctorNightCycle()
+vigilanteNightCycle()
+
