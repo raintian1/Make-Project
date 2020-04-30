@@ -5,10 +5,8 @@ print('\033[1m' + '''Welcome to Mafia! Input the number of players:''' + '\033[0
 
 # Change this to dictionary (or dictionary containing a dictionary, ie: when you look up John, it will display his role, dead/alive, framed status etc.)
 # Or create a class variable for role? for XXX in class: if status == 'alive'...
-roles = ['Sheriff', 'Doctor', 'Mayor', 'Escort', 'Amnesiac', 'Godfather', 'Framer', 'Jester', 'Jailor', 'Mafioso', 'Vigilante', 'Executioner']
+roles = ['Sheriff', 'Doctor', 'Mayor', 'Escort', 'Survivor', 'Godfather', 'Framer', 'Jester', 'Jailor', 'Mafioso', 'Vigilante', 'Executioner']
 playerList = []
-alive = {}
-
 
 def transfromList():
     global playerNumber
@@ -88,7 +86,7 @@ def godfatherTarget():
         godfather_target = str(input())
         if godfather_target not in playerList:
             print('Player not found, try again')
-        elif godfather_target == merged_dct["Godfather"]:
+        elif godfather_target == merged_dct["Godfather"] or godfather_target == merged_dct["Mafioso"] or godfather_target == merged_dct["Framer"]:
             print('Cannot target a member of the Mafia. Try again')
         else:
             mafiosoNightCycle()
@@ -127,7 +125,7 @@ def mafiosoTarget():
         mafioso_target = str(input())
         if mafioso_target not in playerList:
             print('Player not found, try again')
-        elif mafioso_target == merged_dct["Mafioso"]:
+        elif mafioso_target == merged_dct["Mafioso"] or mafioso_target == merged_dct["Godfather"] or mafioso_target == merged_dct["Framer"]:
             print('Cannot target a member of the Mafia. Try again')
         else:
             mafiaTargetCheck()
@@ -166,7 +164,7 @@ def framerTarget():
         framer_target = str(input())
         if framer_target not in playerList:
             print('Player not found, try again')
-        elif framer_target == merged_dct["Framer"]:
+        elif framer_target == merged_dct["Framer"] or framer_target == merged_dct["Godfather"] or framer_target == merged_dct["Mafioso"]:
             print('Cannot target a member of the Mafia. Try again')
         else:
             jailorNightCycle()
@@ -221,7 +219,7 @@ def jailorTarget():
         if jailor_target not in playerList:
             print('Player not found, try again')
         elif jailor_target == merged_dct["Jailor"]:
-            print('You cannot target yourself. Try again')
+            print('You cannot target yourself, try again')
         else:
             escortNightCycle()
     return jailor_target
@@ -245,7 +243,7 @@ def escortAlive():
             escortTarget()
         elif escort_alive == 'n':
             print('The Escort is dead')
-            sheriffNightCycle()
+            godfatherNightCycle()
         else:
             print('Select y/n, try again')
     return escort_alive
@@ -261,7 +259,7 @@ def escortTarget():
         elif escort_target == merged_dct["Escort"]:
             print('You cannot target yourself. Please try again.')
         else:
-            sheriffNightCycle()
+            godfatherNightCycle()
     return escort_target
 
 def sheriffNightCycle():
@@ -336,9 +334,8 @@ def doctorTarget():
             print('Player not found, try again')
         if doctor_target == mafiaside_target:
             print("Your target was attacked last night but you were able to save them.")
-            exit()
+            vigilanteNightCycle()
         else:
-            print("Your target had a guardian angel watching, but nothing happened")
             vigilanteNightCycle()
     return doctor_target
 
@@ -356,12 +353,12 @@ def vigilanteAlive():
     while vigilante_alive != 'y' or vigilante_alive != 'n':
         vigilante_alive = str(input())
         if vigilante_alive == 'y':
-            print('Who will the Vigilante shoot??')
+            print('Who will the Vigilante shoot?')
             vigilante_target = ''
             vigilanteTarget()
         elif vigilante_alive == 'n':
             print('The Vigilante is dead')
-            exit()
+            return
         else:
             print('Select y/n, try again')
     return vigilante_alive
@@ -377,19 +374,18 @@ def vigilanteTarget():
         elif vigilante_target == merged_dct["Vigilante"]:
             print('You cannot target yourself. Please try again.')
         else:
-            exit()
+            return
     return vigilante_target
 
 transfromList()
 inputPlayers()
 assignRoles()
 nightTime()
+jailorNightCycle()
+escortNightCycle()
 godfatherNightCycle()
 mafiosoNightCycle()
 framerNightCycle()
-jailorNightCycle()
-escortNightCycle()
 sheriffNightCycle()
 doctorNightCycle()
 vigilanteNightCycle()
-
