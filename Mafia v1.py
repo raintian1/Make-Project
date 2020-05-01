@@ -145,6 +145,7 @@ def mafiosoTarget():
         elif mafioso_target == merged_dct["Mafioso"] or mafioso_target == merged_dct["Godfather"] or mafioso_target == merged_dct["Framer"]:
             print('Cannot target a member of the Mafia. Try again')
         else:
+            mafiaTargetCheck()
             framerNightCycle()
     return mafioso_target
 
@@ -197,52 +198,68 @@ def mafiaTargetCheck():
     global mafiaside_target
 
     if jailor_alive == 'y':
-        if godfather_alive == 'y' and mafioso_alive == 'y':
-            if merged_dct["Godfather"] == jailor_target:
+        if jailor_target != merged_dct["Godfather"] and jailor_target != merged_dct["Mafioso"]:
+            if godfather_alive == 'y' and mafioso_alive == 'y':
+                if godfather_target != mafioso_target:
+                    mafiaside_target = godfather_target
+                    print('The Mafioso must comply with the Godfather, ' + mafiaside_target + ''' is tonight's target.''')
+                    if mafiaside_target == jailor_target:
+                        print('However, the target was immune tonight.')
+                else:
+                    mafiaside_target = godfather_target
+                    print('The Mafia came to an agreement, ' + mafiaside_target + ''' is tonight's target.''')
+                    if mafiaside_target == jailor_target:
+                        print('However, the target was immune tonight.')
+            elif godfather_alive == 'y' and mafioso_alive == 'n':
+                mafiaside_target = godfather_target
+                print('With no Mafioso, ' + mafiaside_target + ''' is tonight's target.''')
+                if mafiaside_target == jailor_target:
+                    print('However, the target was immune tonight.')
+            elif godfather_alive == 'n' and mafioso_alive == 'y':
+                mafiaside_target = mafioso_target
+                print('With no Godfather, ' + mafiaside_target + ''' is tonight's target.''')
+                if mafiaside_target == jailor_target:
+                    print('However, the target was immune tonight.')
+        elif jailor_target == merged_dct["Godfather"]:
+            if godfather_alive == 'y' and mafioso_alive == 'y':
                 mafiaside_target = mafioso_target
                 print('The Godfather was jailed, ' + mafiaside_target + ''' is tonight's target.''')
-            if merged_dct["Mafioso"] == jailor_target:
+                if mafiaside_target == jailor_target:
+                    print('However, the target was immune tonight.')
+            elif godfather_alive == 'y' and mafioso_alive == 'n':
+                mafiaside_target = ''
+                print('With no Mafioso and the Godfather jailed, the mafia could not kill tonight.' )
+        elif jailor_target == merged_dct["Mafioso"]:
+            if godfather_alive == 'y' and mafioso_alive == 'y':
                 mafiaside_target = godfather_target
                 print('The Mafioso was jailed, ' + mafiaside_target + ''' is tonight's target.''')
-            if merged_dct["Godfather"] != jailor_target and merged_dct["Mafioso"] != jailor_target:
-                if mafioso_target == godfather_target:
-                    mafiaside_target = godfather_target
-                    print('The Mafia came to an agreement, ' + mafiaside_target + ''' is tonight's target.''')
-                else:
-                    mafiaside_target = godfather_target
-                    print('The Mafioso must comply with the Godfather, ' + mafiaside_target + ''' is tonight's target.''')
-        if godfather_alive == 'y' and mafioso_alive == 'n':
-            if merged_dct["Godfather"] == jailor_target:
+                if mafiaside_target == jailor_target:
+                    print('However, the target was immune tonight.')
+            elif godfather_alive == 'n' and mafioso_alive == 'y':
                 mafiaside_target = ''
-                print('With no Mafioso and the Godfather in jail, the mafia cannot kill tonight.')
-            if merged_dct["Godfather"] != jailor_target:
-                mafiaside_target = godfather_target
-                print('With no Mafioso, ' + mafiaside_target + ''' is tonight's target.''')
-        if godfather_alive == 'n' and mafioso_alive == 'y':
-            if merged_dct["Mafioso"] == jailor_target:
-                mafiaside_target = ''
-                print('With no Godfather and the mafioso in jail, the mafia cannot kill tonight.')
-            if merged_dct["Mafioso"] != jailor_target:
-                mafiaside_target = mafioso_target
-                print('With no Godfather, ' + mafiaside_target + ''' is tonight's target.''')
-        if godfather_alive == 'n' and mafioso_alive == 'n':
-                print('''How did you get here?''')
+                print('With no Godfather and the Mafioso jailed, the mafia could not kill tonight.' )
     else:
         if godfather_alive == 'y' and mafioso_alive == 'y':
-                if mafioso_target == godfather_target:
-                    mafiaside_target = godfather_target
-                    print('The Mafia came to an agreement, ' + mafiaside_target + ''' is tonight's target.''')
-                else:
-                    mafiaside_target = godfather_target
-                    print('The Mafioso must comply with the Godfather, ' + mafiaside_target + ''' is tonight's target.''')
-        if godfather_alive == 'y' and mafioso_alive == 'n':
+            if godfather_target != mafioso_target:
                 mafiaside_target = godfather_target
-                print('With no Mafioso, ' + mafiaside_target + ''' is tonight's target.''')
-        if godfather_alive == 'n' and mafioso_alive == 'y':
-                mafiaside_target = mafioso_target
-                print('With no Godfather, ' + mafiaside_target + ''' is tonight's target.''')
-        if godfather_alive == 'n' and mafioso_alive == 'n':
-                print('''How did you get here?''')
+                print('The Mafioso must comply with the Godfather, ' + mafiaside_target + ''' is tonight's target.''')
+                if mafiaside_target == jailor_target:
+                    print('However, the target was immune tonight.')
+            else:
+                mafiaside_target = godfather_target
+                print('The Mafia came to an agreement, ' + mafiaside_target + ''' is tonight's target.''')
+                if mafiaside_target == jailor_target:
+                    print('However, the target was immune tonight.')
+        elif godfather_alive == 'y' and mafioso_alive == 'n':
+            mafiaside_target = godfather_target
+            print('With no Mafioso, ' + mafiaside_target + ''' is tonight's target.''')
+            if mafiaside_target == jailor_target:
+                print('However, the target was immune tonight.')
+        elif godfather_alive == 'n' and mafioso_alive == 'y':
+            mafiaside_target = mafioso_target
+            print('With no Godfather, ' + mafiaside_target + ''' is tonight's target.''')
+            if mafiaside_target == jailor_target:
+                print('However, the target was immune tonight.')
 
 def jailorNightCycle():
     print()
