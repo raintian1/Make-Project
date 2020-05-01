@@ -171,6 +171,10 @@ def framerAlive():
                 if merged_dct["Framer"] == jailor_target:
                     print("You were jailed by the jailor tonight")
                     sheriffNightCycle()
+            else:
+                print('Who will the Framer frame?')
+                framer_target = ''
+                framerTarget()
         elif framer_alive == 'n':
             print('The Framer is dead')
             sheriffNightCycle()
@@ -203,28 +207,38 @@ def mafiaTargetCheck():
                 if godfather_target != mafioso_target:
                     mafiaside_target = godfather_target
                     print('The Mafioso must comply with the Godfather, ' + mafiaside_target + ''' is tonight's target.''')
-                    if mafiaside_target == jailor_target or mafiaside_target == merged_dct["Executioner"]:
+                    if mafiaside_target == jailor_target:
+                        print('However, the target was immune tonight.')
+                    elif mafiaside_target == merged_dct["Executioner"]:
                         print('However, the target was immune tonight.')
                 else:
                     mafiaside_target = godfather_target
                     print('The Mafia came to an agreement, ' + mafiaside_target + ''' is tonight's target.''')
-                    if mafiaside_target == jailor_target or mafiaside_target == merged_dct["Executioner"]:
+                    if mafiaside_target == jailor_target:
+                        print('However, the target was immune tonight.')
+                    elif mafiaside_target == merged_dct["Executioner"]:
                         print('However, the target was immune tonight.')
             elif godfather_alive == 'y' and mafioso_alive == 'n':
                 mafiaside_target = godfather_target
                 print('With no Mafioso, ' + mafiaside_target + ''' is tonight's target.''')
-                if mafiaside_target == jailor_target or mafiaside_target == merged_dct["Executioner"]:
+                if mafiaside_target == jailor_target:
+                    print('However, the target was immune tonight.')
+                elif mafiaside_target == merged_dct["Executioner"]:
                     print('However, the target was immune tonight.')
             elif godfather_alive == 'n' and mafioso_alive == 'y':
                 mafiaside_target = mafioso_target
                 print('With no Godfather, ' + mafiaside_target + ''' is tonight's target.''')
-                if mafiaside_target == jailor_target or mafiaside_target == merged_dct["Executioner"]:
+                if mafiaside_target == jailor_target:
+                    print('However, the target was immune tonight.')
+                elif mafiaside_target == merged_dct["Executioner"]:
                     print('However, the target was immune tonight.')
         elif jailor_target == merged_dct["Godfather"]:
             if godfather_alive == 'y' and mafioso_alive == 'y':
                 mafiaside_target = mafioso_target
                 print('The Godfather was jailed, ' + mafiaside_target + ''' is tonight's target.''')
-                if mafiaside_target == jailor_target or mafiaside_target == merged_dct["Executioner"]:
+                if mafiaside_target == jailor_target:
+                    print('However, the target was immune tonight.')
+                elif mafiaside_target == merged_dct["Executioner"]:
                     print('However, the target was immune tonight.')
             elif godfather_alive == 'y' and mafioso_alive == 'n':
                 mafiaside_target = ''
@@ -233,7 +247,9 @@ def mafiaTargetCheck():
             if godfather_alive == 'y' and mafioso_alive == 'y':
                 mafiaside_target = godfather_target
                 print('The Mafioso was jailed, ' + mafiaside_target + ''' is tonight's target.''')
-                if mafiaside_target == jailor_target or mafiaside_target == merged_dct["Executioner"]:
+                if mafiaside_target == jailor_target:
+                    print('However, the target was immune tonight.')
+                elif mafiaside_target == merged_dct["Executioner"]:
                     print('However, the target was immune tonight.')
             elif godfather_alive == 'n' and mafioso_alive == 'y':
                 mafiaside_target = ''
@@ -272,6 +288,7 @@ def jailorAlive():
             jailorTarget()
         elif jailor_alive == 'n':
             print('The Jailor is dead')
+            jailor_target = 'N/A'
             godfatherNightCycle()
         else:
             print('Select y/n, try again')
@@ -305,13 +322,18 @@ def trackerAlive():
     while tracker_alive != 'y' or tracker_alive != 'n':
         tracker_alive = str(input())
         if tracker_alive == 'y':
-            if merged_dct["Tracker"] != jailor_target:
+            if jailor_alive == 'y':
+                if merged_dct["Tracker"] != jailor_target:
+                    print('Who will the Tracker follow?')
+                    tracker_target = ''
+                    trackerTarget()
+                if merged_dct["Tracker"] == jailor_target:
+                    print("You were jailed by the jailor tonight")
+                    exit()
+            else:
                 print('Who will the Tracker follow?')
                 tracker_target = ''
                 trackerTarget()
-            if merged_dct["Tracker"] == jailor_target:
-                print("You were jailed by the jailor tonight")
-                exit()
         elif tracker_alive == 'n':
             print('The Tracker is dead')
             exit()
@@ -329,7 +351,38 @@ def trackerTarget():
             print('Player not found, try again')
         elif tracker_target == merged_dct["Tracker"]:
             print('You cannot target yourself. Please try again.')
-        else:
+        elif tracker_target != jailor_target:
+            if tracker_target == merged_dct["Jailor"]:
+                print(tracker_target + ' visited ' + jailor_target + ' tonight.')
+                exit()
+            elif tracker_target == merged_dct["Godfather"]:
+                if mafiaside_target != '':
+                    print(tracker_target + ' visited ' + mafiaside_target + ' tonight.')
+                    exit()
+                else:
+                    print(tracker_target + ' did not visit anyone tonight.')
+                    exit()
+            elif tracker_target == merged_dct["Mafioso"]:
+                if mafiaside_target != '':
+                    print(tracker_target + ' visited ' + mafiaside_target + ' tonight.')
+                    exit()
+                else:
+                    print(tracker_target + ' did not visit anyone tonight.')
+                    exit()
+            elif tracker_target == merged_dct["Sheriff"]:
+                print(tracker_target + ' visited ' + sheriff_target + ' tonight.')
+                exit()
+            elif tracker_target == merged_dct["Vigilante"]:
+                print(tracker_target + ' visited ' + vigilante_target + ' tonight.')
+                exit()
+            elif tracker_target == merged_dct["Doctor"]:
+                print(tracker_target + ' visited ' + doctor_target + ' tonight.')
+                exit()
+        elif tracker_target == jailor_target:
+            print(tracker_target + ' did not visit anyone tonight.')
+            exit()
+        elif tracker_target == merged_dct['Jester'] or tracker_target == merged_dct['Mayor'] or tracker_target == merged_dct['Executioner']:
+            print(tracker_target + ' did not visit anyone tonight.')
             exit()
     return tracker_target
 
@@ -347,13 +400,18 @@ def sheriffAlive():
     while sheriff_alive != 'y' or sheriff_alive != 'n':
         sheriff_alive = str(input())
         if sheriff_alive == 'y':
-            if merged_dct["Sheriff"] != jailor_target:
+            if jailor_alive == 'y':
+                if merged_dct["Sheriff"] != jailor_target:
+                    print('Who will the Sheriff investigate?')
+                    sheriff_target = ''
+                    sheriffTarget()
+                if merged_dct["Sheriff"] == jailor_target:
+                    print("You were jailed by the jailor tonight")
+                    vigilanteNightCycle()
+            else:
                 print('Who will the Sheriff investigate?')
                 sheriff_target = ''
                 sheriffTarget()
-            if merged_dct["Sheriff"] == jailor_target:
-                print("You were jailed by the jailor tonight")
-                vigilanteNightCycle()
         elif sheriff_alive == 'n':
             print('The Sheriff is dead')
             vigilanteNightCycle()
@@ -371,6 +429,27 @@ def sheriffTarget():
             print('Player not found, try again')
         elif sheriff_target == merged_dct["Sheriff"]:
             print('You cannot target yourself. Please try again.')
+        elif framer_alive == 'y' and jailor_target == merged_dct["Framer"]:
+            if sheriff_target == merged_dct["Mafioso"] or sheriff_target == merged_dct["Framer"]:
+                print('Your target appears to be aligned with the Mafia.')
+                vigilanteNightCycle()
+            else:
+                print('Your target appears to be aligned with the Town.')
+                vigilanteNightCycle()
+        elif framer_alive == 'y' and jailor_target != merged_dct["Framer"]:
+            if sheriff_target == framer_target:
+                print('Your target appears to be aligned with the Mafia.')
+                vigilanteNightCycle()
+            else:
+                print('Your target appears to be aligned with the Town.')
+                vigilanteNightCycle()
+        elif framer_alive == 'n':
+            if sheriff_target == merged_dct["Mafioso"] or sheriff_target == merged_dct["Framer"]:
+                print('Your target appears to be aligned with the Mafia.')
+                vigilanteNightCycle()
+            else:
+                print('Your target appears to be aligned with the Town.')
+                vigilanteNightCycle()
         else:
             vigilanteNightCycle()
     return doctor_target
@@ -389,13 +468,18 @@ def doctorAlive():
     while doctor_alive != 'y' or doctor_alive != 'n':
         doctor_alive = str(input())
         if doctor_alive == 'y':
-            if merged_dct["Doctor"] != jailor_target:
+            if jailor_alive == 'y':
+                if merged_dct["Doctor"] != jailor_target:
+                    print('Who will the Doctor heal?')
+                    doctor_target = ''
+                    doctorTarget()
+                if merged_dct["Doctor"] == jailor_target:
+                    print("You were jailed by the jailor tonight")
+                    trackerNightCycle()
+            else:
                 print('Who will the Doctor heal?')
                 doctor_target = ''
                 doctorTarget()
-            if merged_dct["Doctor"] == jailor_target:
-                print("You were jailed by the jailor tonight")
-                trackerNightCycle()
         elif doctor_alive == 'n':
             print('The Doctor is dead')
             trackerNightCycle()
@@ -411,12 +495,18 @@ def doctorTarget():
         doctor_target = str(input())
         if doctor_target not in playerList:
             print('Player not found, try again')
-        elif doctor_target == mafiaside_target:
-            print("Your target was attacked last night but you were able to save them.")
-            trackerNightCycle()
-        elif doctor_target == jailor_target:
-            print('Your target was jailed tonight.')
-            trackerNightCycle()
+        elif jailor_alive == 'y':
+            if jailor_target != mafiaside_target:
+                if doctor_target == jailor_target:
+                    print('Your target was jailed tonight.')
+                    trackerNightCycle()
+                else:
+                    print('Your target was attacked last night.')
+                    trackerNightCycle()
+        elif jailor_alive == 'n':
+            if doctor_target == mafiaside_target:
+                print('Your target was attacked last night.')
+                trackerNightCycle()
         else:
             trackerNightCycle()
     return doctor_target
@@ -435,13 +525,18 @@ def vigilanteAlive():
     while vigilante_alive != 'y' or vigilante_alive != 'n':
         vigilante_alive = str(input())
         if vigilante_alive == 'y':
-            if merged_dct["Vigilante"] != jailor_target:
+            if jailor_alive == 'y':
+                if merged_dct["Vigilante"] != jailor_target:
+                    print('Who will the Vigilante execute?')
+                    vigilante_target = ''
+                    vigilanteTarget()
+                if merged_dct["Vigilante"] == jailor_target:
+                    print("You were jailed by the jailor tonight")
+                    doctorNightCycle()
+            else:
                 print('Who will the Vigilante execute?')
                 vigilante_target = ''
                 vigilanteTarget()
-            if merged_dct["Vigilante"] == jailor_target:
-                print("You were jailed by the jailor tonight")
-                doctorNightCycle()
         elif vigilante_alive == 'n':
             print('The Vigilante is dead')
             doctorNightCycle()
